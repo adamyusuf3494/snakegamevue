@@ -1,6 +1,6 @@
 <template>
     <div>
-        
+
         login
         <form @submit.prevent="pressed">
             <div class="login">
@@ -23,9 +23,13 @@ import "firebase/auth";
        methods:{
             async pressed(){
                 try{
-                    const val = await firebase.auth().signInWithEmailAndPassword(this.email,this.password)
-                    console.log(val)
-                    this.$router.replace({name:"home"})
+                    await firebase.auth().signInWithEmailAndPassword(this.email,this.password)
+                    if(this.$route.query.redirect == "/snakeGameBoard"){
+                        this.$router.push(this.$route.query.redirect || '/')
+                    }else{
+                        this.$router.replace({name:"home"})
+                    }
+                    
                 }catch(err){
                     console.log(err)
                 }

@@ -1,10 +1,10 @@
 <template>
         
-        <span v-if = "!this.loggedIn"> 
-            <router-link to="/projectsLogin">
+        <span v-if = "!this.loggedIn" v-on:click = "auth"> 
+            <router-link to="/projectsLogin"  >
                 <div >
                     <!-- Change image to a snak game-->
-                    <img alt="Vue logo" src="../assets/snakeProject.png">
+                    <img alt="Vue logo" src="../assets/snakeProject.png" width="200px">
                     <p>snakes game, small image with some info. link to login page</p>
                 </div>
             </router-link> 
@@ -35,6 +35,11 @@
                 loggedIn: false
             }
         },
+        methods:{
+            auth(){
+                this.$router.push({ name: 'projectsLogin', query: { redirect: '/snakeGameBoard' } });
+            }
+        }
     }
 </script>
 

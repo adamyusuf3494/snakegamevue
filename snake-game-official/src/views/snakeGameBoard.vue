@@ -38,12 +38,10 @@ export default {
 
   methods: {
     init() {
-      console.log("init");
       document.addEventListener("keydown", this.direction);
       document.addEventListener("keydown", this.pauseGameKeyboard);
 
       this.cvs = document.getElementById("snake");
-      console.log('Canvas', this.cvs);
       this.ctx = this.cvs.getContext("2d");
 
       this.snake[0] = {
@@ -88,7 +86,6 @@ export default {
     },
 
     restart() {
-        console.log('Restarting...');
         this.clearBoard();
         this.init();
     },
@@ -112,8 +109,6 @@ export default {
     },
 
     playGame() {
-      console.log("playGame");
-
       // draw background
       this.ctx.fillStyle = "green";
       this.ctx.fillRect(0, 0, 608, 608);
@@ -216,7 +211,6 @@ export default {
   },
 
   mounted() {
-    console.log("mounted");
     this.init();
   }
 };

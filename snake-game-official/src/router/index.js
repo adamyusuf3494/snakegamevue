@@ -7,6 +7,8 @@ import projectsLogin from '../views/projectsLogin.vue'
 import projectsRegister from '../views/projectsRegister.vue'
 import snakeGameBoard from '../views/snakeGameBoard.vue'
 
+
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -55,5 +57,6 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
+
 
 export default router
