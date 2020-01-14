@@ -1,7 +1,5 @@
 <template>
     <div>
-
-        login
         <form @submit.prevent="pressed">
             <div class="login">
                 <input type="email" v-model="email" placeholder="login">
@@ -12,7 +10,8 @@
             <button type="submit">login</button>
         </form>
         <div v-if="error" class="error">{{error.message}}</div>
-        <span>Need an account? Click here to <router-link to="/projectsRegister">register</router-link> </span>
+        <span>Need an account? Click here to <router-link to="/projectsRegister">register</router-link> </span><br>
+        <span>Forgot password? Click here to <router-link to="/retrievePassword">retrieve password</router-link> </span>
     </div>
 </template>
 
@@ -21,20 +20,26 @@ import * as firebase from "firebase/app";
 import "firebase/auth";
     export default {
        methods:{
-            async pressed(){
-                try{
-                    await firebase.auth().signInWithEmailAndPassword(this.email,this.password)
-                    if(this.$route.query.redirect == "/snakeGameBoard"){
+           redirect(){
+                if(this.$route.query.redirect == "/snakeGameBoard"){
                         this.$router.push(this.$route.query.redirect || '/')
                     }else{
                         this.$router.replace({name:"home"})
                     }
+            },
+
+            async pressed(){
+                try{
+                    await firebase.auth().signInWithEmailAndPassword(this.email,this.password)
                     
+                    this.redirect();
                 }catch(err){
-                    console.log(err)
+                    this.error = err;
                 }
                 
             }
+
+            
         },
         data(){
             return {

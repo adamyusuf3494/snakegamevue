@@ -6,7 +6,8 @@ import projects from '../views/projects.vue'
 import projectsLogin from '../views/projectsLogin.vue'
 import projectsRegister from '../views/projectsRegister.vue'
 import snakeGameBoard from '../views/snakeGameBoard.vue'
-
+import resetPassword from '../views/resetPassword.vue'
+import profileSettings from '../views/profileSettings.vue'
 
 
 Vue.use(VueRouter)
@@ -41,6 +42,16 @@ const routes = [
     path: '/snakeGameBoard',
     name: 'snakeGameBoard',
     component: snakeGameBoard
+  },
+  {
+    path: '/resetPassword',
+    name: 'resetPassword',
+    component: resetPassword
+  },
+  {
+    path: '/profileSettings',
+    name: 'profileSettings',
+    component: profileSettings
   },
   {
     path: '/about',

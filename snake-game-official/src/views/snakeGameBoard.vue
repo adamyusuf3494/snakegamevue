@@ -6,10 +6,20 @@
     </div>
     <canvas id="snake" width="608" height="608" style="border:1px solid #d3d3d3;"></canvas>
     <p id="p1">Khalid score is :</p>
+    <table id="leaderboard">
+      <tr>
+        <th>Username</th>
+        <th>Score</th>
+      </tr>
+    </table>
   </div>
 </template>
 
 <script>
+import * as firebase from "firebase/app";
+import "firebase/auth";
+import db from "@/main";
+
 export default {
   data: function() {
     return {
@@ -28,9 +38,9 @@ export default {
 
       cvs: null,
       ctx: null,
-      user: {
-        displayName: "Guest"
-      }
+      user: "",
+      username:"",
+      email: ""
     };
   },
 
@@ -38,6 +48,9 @@ export default {
 
   methods: {
     init() {
+      this.updateUserScore()
+      
+
       document.addEventListener("keydown", this.direction);
       document.addEventListener("keydown", this.pauseGameKeyboard);
 
@@ -48,7 +61,9 @@ export default {
         x: 10 * this.square,
         y: 12 * this.square
       };
-
+      this.user = firebase.auth().currentUser;
+      this.email= this.user.email
+      this.fillLeaderBoard()
       this.runGame();
     },
 
@@ -86,8 +101,8 @@ export default {
     },
 
     restart() {
-        this.clearBoard();
-        this.init();
+      this.clearBoard();
+      this.init();
     },
 
     clearBoard() {
@@ -164,6 +179,8 @@ export default {
         // if the snake eats the food
         if (oldX == this.food.x && oldY == this.food.y) {
           this.score++;
+          console.log(this.score)
+          this.updateUserScore()
           this.food = {
             x: Math.floor(Math.random() * 37) * this.square,
             y: Math.floor(Math.random() * 37) * this.square
@@ -200,19 +217,71 @@ export default {
         }
         this.snake.unshift(newHead);
 
-        document.getElementById("p1").innerHTML =
-          this.user.displayName + this.score;
+        document.getElementById("p1").innerHTML = this.username +"'s score is: "+ this.score;
+
+        
       }
     },
 
-    runGame() {
-      this.game = setInterval(this.playGame, 100);
-    }
+    runGame(){
+      this.game = setInterval(this.playGame,100)
+    },
+
+
+    updateUserScore() {
+      console.log("hello")
+      db.collection("users")
+        .get()
+        .then(querySnapshot => {
+          querySnapshot.forEach(doc => {
+            console.log(doc)
+            if (doc.id == this.email) {
+              console.log(doc.get("score"))
+              this.username= doc.get("username")
+              if (doc.get("score") == null) {
+                this.saveData();
+              } else if (doc.get("score") < this.score) {
+                this.updateData()
+              }
+            }
+          });
+        });
+    },
+
+    saveData() {
+      var user = firebase.auth().currentUser;
+      const dbUsers = db.collection('users').doc(user.email);
+
+      dbUsers.push({username:this.username})
+    },
+
+    updateData() {
+      var user = firebase.auth().currentUser;
+      const dbUsers = db.collection('users').doc(user.email);
+
+      dbUsers.update({score:this.score})
+    },
+  
+
+  fillLeaderBoard(){
+    const dbUsers = db.collection('users');
+    const query = dbUsers.orderBy('score', 'desc').limit(5)
+  
+    query.get()
+    .then(dbUsers =>{
+      dbUsers.forEach(doc =>{
+        var data = doc.data()
+        console.log(data)
+        document.getElementById("leaderboard").innerHTML += "<tr><td>"+data.username+"</td><td>"+data.score+"</td></tr>"
+        })
+    })
+  }
   },
 
   mounted() {
     this.init();
-  }
+    
+     }
 };
 </script>
 

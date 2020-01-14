@@ -1,6 +1,5 @@
 <template>
     <div>
-        <div v-if="error" class="error">{{error.message}}</div>
         <form @submit.prevent="pressed">
             
             <div class="email">
@@ -14,31 +13,75 @@
             </div>
             <button type="submit">register</button>
         </form>
-        
+        <div v-if="error" class="error">{{error}}</div>
     </div>
 </template>
 
 <script>
 import * as firebase from "firebase/app";
 import "firebase/auth";
+import db from '@/main'
+
     export default {
         methods:{
             async pressed(){
                 try{
-                    const user = firebase.auth().createUserWithEmailAndPassword(this.email,this.password)
-                    console.log(user)
-                    this.$router.replace({name:"home"})
+                    if(this.username != "" && !this.usernameExists()){
+                        firebase.auth().createUserWithEmailAndPassword(this.email,this.password).catch(err => {
+                        this.error = err.message;
+                        });
+
+                        var user = firebase.auth().currentUser;
+
+                        if(user){
+                            console.log("how")
+                            this.saveData();
+                            this.$router.replace({name:"home"})
+                        }
+                    }
+                    else if (this.username == ""){
+                        this.error = "missing username"
+                    }
+
+                    else {
+                        this.error = "username already exists"
+                    }
+
                 }catch(err){
-                    console.log(err)
+                    this.error = err;
                 }
                 
-            }
-        },
+            },
+
+            saveData(){
+                db.collection("users").doc(this.email).set({
+                    username: this.username
+                })
+                .then(function() {
+                    console.log("Document written with ID: ");
+                })
+                .catch(function(error) {
+                    console.error("Error adding document: ", error);
+                });
+            },
+
+            usernameExists(){
+                db.collection("users").where('username', '==', this.username)
+                .get().then( querySnapshot =>{
+                    if(querySnapshot == null){
+                        return false;
+                    }
+                    return true;
+                    });
+                }
+            },
+        
         data(){
             return {
                 email: "",
                 password: "",
-                error: ""
+                error: "",
+                username: ""
             }
         }
     }

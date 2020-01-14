@@ -5,6 +5,7 @@
       <router-link to="/resume">Resume</router-link>|
       <router-link to="/projects">Projects</router-link>|
       <router-link to="/about">About</router-link>|
+      <router-link to="/profileSettings" v-show="this.loggedIn == true">profileSettings</router-link>|
       <span v-if="this.loggedIn" @click="signOut"><router-link to="/projectsLogin">LogOut</router-link></span>
         <span v-else><router-link to="/projectsLogin">Login</router-link>
       </span>
