@@ -1,13 +1,13 @@
 <template>
   <div id="app">
     <div id="nav" v-show="$route.name !== 'home'">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/resume">Resume</router-link>|
-      <router-link to="/projects">Projects</router-link>|
-      <router-link to="/about">About</router-link>|
-      <router-link to="/profileSettings" v-show="this.loggedIn == true">profileSettings</router-link>|
-      <span v-if="this.loggedIn" @click="signOut"><router-link to="/projectsLogin">LogOut</router-link></span>
-        <span v-else><router-link to="/projectsLogin">Login</router-link>
+      <router-link class="link" to="/">Home</router-link> 
+      <router-link  class="link" to="/resume">Resume</router-link>
+      <router-link  class="link" to="/projects">Projects</router-link>
+      <router-link class="link" to="/about">About</router-link>
+      <router-link class="link" to="/profileSettings" v-show="this.loggedIn == true">profileSettings</router-link>
+      <span v-if="this.loggedIn" @click="signOut"><router-link class="link" to="/projectsLogin">LogOut</router-link></span>
+        <span v-else><router-link class="link" to="/projectsLogin">Login</router-link>
       </span>
     </div>
     <router-view/>
@@ -60,23 +60,40 @@ export default {
 
 <style lang="scss">
 #app {
-  font-family: "Lato", sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+  align-items: center;
   color: #2c3e50;
 }
 
+
+
 #nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #0d23e7;
-    }
+    margin: 25px;
+    width: 900px;
+    display: flex;
+    justify-content: space-around;
   }
-}
+
+  .link {
+    width: 150px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    color:#333;
+    font-size: 12pt;
+    border: 2px solid #7fcd91;
+    transition: background .25s ease-in-out;
+    -moz-transition: background .25s ease-in-out;
+    -webkit-transition: background .25s ease-in-out;
+  }
+
+  .link:hover {
+    background: #7fcd91;
+    color: white;
+    cursor: pointer;
+  }
 </style>

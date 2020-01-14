@@ -1,9 +1,10 @@
 <template>
   <div>
-    <div>
-      <button v-on:click="this.pause ">Play/Pause</button>
-      <button v-on:click="this.restart" id="restartGame">{{gameOver ? "Play again" : "Restart"}}</button>
+    <div id="links-snake">
+      <div class="link-snake" v-on:click="this.pause ">Play/Pause</div>
+      <div class="link-snake" v-on:click="this.restart" id="restartGame">{{gameOver ? "Play again" : "Restart"}}</div>
     </div>
+
     <canvas id="snake" width="608" height="608" style="border:1px solid #d3d3d3;"></canvas>
     <p id="p1">Khalid score is :</p>
     <table id="leaderboard">
@@ -289,5 +290,35 @@ export default {
 canvas {
   display: block;
   margin: 0 auto;
+}
+
+#links-snake {
+    margin-bottom: 25px;
+    width: 350px;
+    display: flex;
+    justify-content: space-around;
+    
+  }
+
+.link-snake {
+  width: 150px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  color:#333;
+  font-size: 12pt;
+  border: 2px solid #7fcd91;
+  transition: background .25s ease-in-out;
+  -moz-transition: background .25s ease-in-out;
+  -webkit-transition: background .25s ease-in-out;
+  background: #7fcd91;
+  color: white;
+}
+.link-snake:hover {
+  background: white;
+  color: #7fcd91;
+  cursor: pointer;
 }
 </style>

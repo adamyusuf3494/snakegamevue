@@ -1,23 +1,14 @@
 <template>
+    <div id="links-projects">
+        <div class="link-projects" @click="goToSnakeGameBoard()">
+            <img alt="Vue logo" src="../assets/snakeProject.png" width="200px">
+            <p id="projects-desc">snakes game, small image with some info. link to login page
+                snakes game, small image with some info. link to login page
+                snakes game, small image with some info. link to login page
+            </p>
+        </div>
+    </div>
         
-        <span v-if = "!this.loggedIn" v-on:click = "auth"> 
-            <router-link to="/projectsLogin"  >
-                <div >
-                    <!-- Change image to a snak game-->
-                    <img alt="Vue logo" src="../assets/snakeProject.png" width="200px">
-                    <p>snakes game, small image with some info. link to login page</p>
-                </div>
-            </router-link> 
-        </span>
-        <span v-else>
-            <router-link to="/snakeGameBoard">
-                <div >
-                    <!-- Change image to a snak game-->
-                    <img alt="Vue logo" src="../assets/snakeProject.png" width="200px">
-                    <p>snakes game, small image with some info. link to login page</p>
-                </div>
-            </router-link> 
-        </span>
 </template>
 
 <script>
@@ -36,6 +27,14 @@
             }
         },
         methods:{
+            goToSnakeGameBoard(){
+                if (!this.loggedIn){
+                    this.auth()
+                }
+                else{
+                    this.$router.push({ name: 'snakeGameBoard'});
+                }
+            },
             auth(){
                 this.$router.push({ name: 'projectsLogin', query: { redirect: '/snakeGameBoard' } });
             }
@@ -47,21 +46,45 @@
 img{
     float: left;
 }
-p{
-    float:left;
-    padding-top: 50px;
-    padding-left: 25px;
-}
+
 div{
-    margin: 30px;
-    padding: 20px;
+    
     float: left;
-    background:#ff9d2f;
-    color: white;
 
 }
-span{
-    float: left;
-}
+
+#projects-desc{
+    font-size: 16pt;
+    float:left;
+    padding: 20px;
+  }
+
+#links-projects {
+    margin: 75px;
+    width: 600px;
+    display: flex;
+    justify-content: space-around;
+  }
+
+  .link-projects {
+    padding: 20px;
+    width: 6000px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    color:#333;
+    font-size: 12pt;
+    border: 2px solid #7fcd91;
+    transition: background .25s ease-in-out;
+    -moz-transition: background .25s ease-in-out;
+    -webkit-transition: background .25s ease-in-out;
+  }
+.link-projects:hover {
+    background: #7fcd91;
+    color: white;
+    cursor: pointer;
+  }
 
 </style>
