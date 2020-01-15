@@ -2,9 +2,8 @@
     <div id="links-projects">
         <div class="link-projects" @click="goToSnakeGameBoard()">
             <img alt="Vue logo" src="../assets/snakeProject.png" width="200px">
-            <p id="projects-desc">snakes game, small image with some info. link to login page
-                snakes game, small image with some info. link to login page
-                snakes game, small image with some info. link to login page
+            <p id="projects-desc">This project is a snake game that I build using vue framework.<br> I encoparated firebase authentication to 
+                access the game. <br>Firebase was also used to implement a backend to record the users score and to create a leaderboard
             </p>
         </div>
     </div>
@@ -53,8 +52,9 @@ div{
 
 }
 
+
 #projects-desc{
-    font-size: 16pt;
+    font-size: 18pt;
     float:left;
     padding: 20px;
   }

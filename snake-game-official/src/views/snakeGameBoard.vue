@@ -82,7 +82,6 @@ export default {
     },
 
     goToSnakeGameBoard() {
-      console.log(this.loggedIn);
       if (!this.loggedIn) {
         this.auth();
       } else {
@@ -209,7 +208,6 @@ export default {
         // if the snake eats the food
         if (oldX == this.food.x && oldY == this.food.y) {
           this.score++;
-          console.log(this.score);
           this.updateUserScore();
           this.food = {
             x: Math.floor(Math.random() * 37) * this.square,
@@ -257,12 +255,10 @@ export default {
     },
 
     updateUserScore() {
-      console.log("hello");
       db.collection("users")
         .get()
         .then(querySnapshot => {
           querySnapshot.forEach(doc => {
-            console.log(doc);
             if (doc.id == this.email) {
               var data = doc.data();
               if (data.username != null) {
@@ -302,7 +298,6 @@ export default {
       query.get().then(dbUsers => {
         dbUsers.forEach(doc => {
           var data = doc.data();
-          console.log(data);
           document.getElementById("leaderboard").innerHTML +=
             "<tr><td>" +
             data.username +
@@ -316,8 +311,6 @@ export default {
 
   mounted() {
     this.loggedIn = firebase.auth().currentUser;
-
-    console.log(this.loggedIn);
     this.init();
   }
 };

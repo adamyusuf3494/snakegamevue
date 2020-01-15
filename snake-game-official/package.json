@@ -1,5 +1,6 @@
 {
   "name": "snake-game-official",
+  "homepage":"https://adamyusuf.com",
   "version": "0.1.0",
   "private": true,
   "scripts": {
