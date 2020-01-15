@@ -1,6 +1,5 @@
 <template>
   <div>
-    profile settings
     <form @submit.prevent="pressed">
       <div class="email">
         <input type="email" v-model="email" placeholder="email" />
@@ -103,15 +102,34 @@ export default {
   color: red;
   font-size: 18px;
 }
-input {
-  width: 400 px;
-  padding: 30px;
-  margin: 20px;
-  font-size: 21px;
+input{
+    width: 400 px;
+    padding: 36px;
+    margin: 20px;
+    font-size: 23px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    color:#333;
+    border: 2px solid #7fcd91;
+    transition: background .25s ease-in-out;
+    -moz-transition: background .25s ease-in-out;
+    -webkit-transition: background .25s ease-in-out;
+    text-decoration: none;
+  
 }
-button {
-  width: 400px;
-  height: 75px;
-  font-size: 100%;
+button{
+    width: 400px;
+    height: 75px;
+    font-size: 23px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+button:hover {
+    cursor: pointer;
 }
 </style>

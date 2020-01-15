@@ -61,14 +61,14 @@ div{
 
 #links-projects {
     margin: 75px;
-    width: 600px;
+    width: 750px;
     display: flex;
     justify-content: space-around;
   }
 
   .link-projects {
     padding: 20px;
-    width: 6000px;
+    width: 750px;
     height: 200px;
     display: flex;
     align-items: center;

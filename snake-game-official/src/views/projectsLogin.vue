@@ -11,7 +11,7 @@
         </form>
         <div v-if="error" class="error">{{error.message}}</div>
         <span>Need an account? Click here to <router-link to="/projectsRegister">register</router-link> </span><br>
-        <span>Forgot password? Click here to <router-link to="/retrievePassword">retrieve password</router-link> </span>
+        <span>Forgot password? Click here to <router-link to="/resetPassword">reset password</router-link> </span>
     </div>
 </template>
 
@@ -58,13 +58,33 @@ import "firebase/auth";
 }
 input{
     width: 400 px;
-    padding: 30px;
+    padding: 36px;
     margin: 20px;
-    font-size: 21px;
+    font-size: 23px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    color:#333;
+    border: 2px solid #7fcd91;
+    transition: background .25s ease-in-out;
+    -moz-transition: background .25s ease-in-out;
+    -webkit-transition: background .25s ease-in-out;
+    text-decoration: none;
+  
 }
 button{
     width: 400px;
     height: 75px;
-    font-size: 100%;
+    font-size: 23px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
+
+button:hover {
+    cursor: pointer;
+}
+
 </style>

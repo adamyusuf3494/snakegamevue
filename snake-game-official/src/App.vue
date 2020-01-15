@@ -76,7 +76,8 @@ export default {
     justify-content: space-around;
   }
 
-  .link {
+
+  .link{
     width: 150px;
     height: 50px;
     display: flex;
@@ -89,6 +90,7 @@ export default {
     transition: background .25s ease-in-out;
     -moz-transition: background .25s ease-in-out;
     -webkit-transition: background .25s ease-in-out;
+    text-decoration: none;
   }
 
   .link:hover {

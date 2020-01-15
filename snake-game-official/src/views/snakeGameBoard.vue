@@ -1,13 +1,22 @@
 <template>
-  <div>
-    <div id="links-snake">
-      <div class="link-snake" v-on:click="this.pause ">Play/Pause</div>
-      <div class="link-snake" v-on:click="this.restart" id="restartGame">{{gameOver ? "Play again" : "Restart"}}</div>
-    </div>
+  <div class="snake-game">
+    <div id="game">
+          <div id="links-snake">
+            <div class="link-snake" v-on:click="this.pause ">Play/Pause</div>
+            <div
+              class="link-snake"
+              v-on:click="this.restart"
+              id="restartGame"
+            >{{gameOver ? "Play again" : "Restart"}}</div>
+          </div>
 
-    <canvas id="snake" width="608" height="608" style="border:1px solid #d3d3d3;"></canvas>
-    <p id="p1">Khalid score is :</p>
+          <canvas id="snake" width="608" height="608" style="border:1px solid #d3d3d3;"></canvas>
+          <p id="p1">Khalid score is :</p>
+    </div>   
     <table id="leaderboard">
+      <tr>
+        <th id="leaderboard-title" colspan="2">Leaderboard</th>
+      </tr>
       <tr>
         <th>Username</th>
         <th>Score</th>
@@ -24,6 +33,7 @@ import db from "@/main";
 export default {
   data: function() {
     return {
+      loggedIn: false,
       square: 16,
       snake: [],
       game: null,
@@ -40,7 +50,7 @@ export default {
       cvs: null,
       ctx: null,
       user: "",
-      username:"",
+      username: "",
       email: ""
     };
   },
@@ -49,8 +59,11 @@ export default {
 
   methods: {
     init() {
-      this.updateUserScore()
-      
+      this.goToSnakeGameBoard();
+      this.updateUserScore();
+
+      document.getElementById("p1").innerHTML =
+        this.username + "'s score is: " + this.score;
 
       document.addEventListener("keydown", this.direction);
       document.addEventListener("keydown", this.pauseGameKeyboard);
@@ -63,9 +76,25 @@ export default {
         y: 12 * this.square
       };
       this.user = firebase.auth().currentUser;
-      this.email= this.user.email
-      this.fillLeaderBoard()
+      this.email = this.user.email;
+      this.fillLeaderBoard();
       this.runGame();
+    },
+
+    goToSnakeGameBoard() {
+      console.log(this.loggedIn);
+      if (!this.loggedIn) {
+        this.auth();
+      } else {
+        this.$router.push({ name: "snakeGameBoard" });
+      }
+    },
+
+    auth() {
+      this.$router.push({
+        name: "projectsLogin",
+        query: { redirect: "/snakeGameBoard" }
+      });
     },
 
     direction() {
@@ -180,8 +209,8 @@ export default {
         // if the snake eats the food
         if (oldX == this.food.x && oldY == this.food.y) {
           this.score++;
-          console.log(this.score)
-          this.updateUserScore()
+          console.log(this.score);
+          this.updateUserScore();
           this.food = {
             x: Math.floor(Math.random() * 37) * this.square,
             y: Math.floor(Math.random() * 37) * this.square
@@ -218,31 +247,31 @@ export default {
         }
         this.snake.unshift(newHead);
 
-        document.getElementById("p1").innerHTML = this.username +"'s score is: "+ this.score;
-
-        
+        document.getElementById("p1").innerHTML =
+          this.username + "'s score is: " + this.score;
       }
     },
 
-    runGame(){
-      this.game = setInterval(this.playGame,100)
+    runGame() {
+      this.game = setInterval(this.playGame, 100);
     },
 
-
     updateUserScore() {
-      console.log("hello")
+      console.log("hello");
       db.collection("users")
         .get()
         .then(querySnapshot => {
           querySnapshot.forEach(doc => {
-            console.log(doc)
+            console.log(doc);
             if (doc.id == this.email) {
-              console.log(doc.get("score"))
-              this.username= doc.get("username")
-              if (doc.get("score") == null) {
-                this.saveData();
-              } else if (doc.get("score") < this.score) {
-                this.updateData()
+              var data = doc.data();
+              if (data.username != null) {
+                this.username = doc.get("username");
+                if (doc.get("score") == null) {
+                  this.saveData();
+                } else if (doc.get("score") < this.score) {
+                  this.updateData();
+                }
               }
             }
           });
@@ -251,54 +280,75 @@ export default {
 
     saveData() {
       var user = firebase.auth().currentUser;
-      const dbUsers = db.collection('users').doc(user.email);
+      const dbUsers = db.collection("users").doc(user.email);
 
-      dbUsers.push({username:this.username})
+      dbUsers.set({
+        username: this.username,
+        score: this.score
+      });
     },
 
     updateData() {
       var user = firebase.auth().currentUser;
-      const dbUsers = db.collection('users').doc(user.email);
+      const dbUsers = db.collection("users").doc(user.email);
 
-      dbUsers.update({score:this.score})
+      dbUsers.update({ score: this.score });
     },
-  
 
-  fillLeaderBoard(){
-    const dbUsers = db.collection('users');
-    const query = dbUsers.orderBy('score', 'desc').limit(5)
-  
-    query.get()
-    .then(dbUsers =>{
-      dbUsers.forEach(doc =>{
-        var data = doc.data()
-        console.log(data)
-        document.getElementById("leaderboard").innerHTML += "<tr><td>"+data.username+"</td><td>"+data.score+"</td></tr>"
-        })
-    })
-  }
+    fillLeaderBoard() {
+      const dbUsers = db.collection("users");
+      const query = dbUsers.orderBy("score", "desc").limit(5);
+
+      query.get().then(dbUsers => {
+        dbUsers.forEach(doc => {
+          var data = doc.data();
+          console.log(data);
+          document.getElementById("leaderboard").innerHTML +=
+            "<tr><td>" +
+            data.username +
+            "</td><td>" +
+            data.score +
+            "</td></tr>";
+        });
+      });
+    }
   },
 
   mounted() {
+    this.loggedIn = firebase.auth().currentUser;
+
+    console.log(this.loggedIn);
     this.init();
-    
-     }
+  }
 };
 </script>
 
 <style lang="scss" scoped>
-canvas {
-  display: block;
+.snake-game {
+  padding: 25px;
+  background: #7fcd91; 
+  border: 1px solid ; 
+  margin: 15px;
+  border-radius: 5px;
+}
+
+#p1 {
+  text-align: center;
+}
+
+#leaderboard {
   margin: 0 auto;
+  text-align: center;
+  
 }
 
 #links-snake {
-    margin-bottom: 25px;
-    width: 350px;
-    display: flex;
-    justify-content: space-around;
-    
-  }
+  width: 350px;
+  display: flex;
+  justify-content: space-around;
+  margin: 0 auto;
+  padding: 20px;
+}
 
 .link-snake {
   width: 150px;
@@ -307,12 +357,12 @@ canvas {
   align-items: center;
   justify-content: center;
   border-radius: 5px;
-  color:#333;
+  color: #333;
   font-size: 12pt;
   border: 2px solid #7fcd91;
-  transition: background .25s ease-in-out;
-  -moz-transition: background .25s ease-in-out;
-  -webkit-transition: background .25s ease-in-out;
+  transition: background 0.25s ease-in-out;
+  -moz-transition: background 0.25s ease-in-out;
+  -webkit-transition: background 0.25s ease-in-out;
   background: #7fcd91;
   color: white;
 }
@@ -321,4 +371,54 @@ canvas {
   color: #7fcd91;
   cursor: pointer;
 }
+
+#game{
+  background: #DFDFDF; 
+  border: 1px solid ; 
+  padding:3px 25px 10px 25px;
+  margin: 15px;
+  border-radius: 5px;
+}
+table {  
+    color: #333;
+    width: 540px; 
+    border-collapse: collapse; 
+	border-spacing: 0; 
+	margin-left:auto; 
+    margin-right:auto;
+}
+
+td, th {  
+    border: 1px solid ; /* No more visible border */
+    height: 30px; 
+    transition: all 0.3s;  /* Simple transition for hover effect */
+}
+
+th {  
+    background: #DFDFDF;  /* Darken header a bit */
+    font-weight: bold;
+}
+
+td {  
+    background: #FAFAFA;
+    text-align: center; 
+    border: 1px solid ; 
+    height: 30px; 
+    transition: all 0.3s;  
+}
+
+td:hover { 
+  background: #666; 
+  color: #FFF; 
+  cursor: pointer;
+}  
+/* Hover cell effect! */
+
+#leaderboard-title {
+  border: 1px solid ;
+  height: 40px; 
+  transition: all 0.3s;
+  background: #cf5aa0;
+}
+
 </style>
