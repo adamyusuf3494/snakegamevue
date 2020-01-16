@@ -1,18 +1,18 @@
 <template>
   <div class="snake-game">
     <div id="game">
-          <div id="links-snake">
-            <div class="link-snake" v-on:click="this.pause ">Play/Pause</div>
-            <div
-              class="link-snake"
-              v-on:click="this.restart"
-              id="restartGame"
-            >{{gameOver ? "Play again" : "Restart"}}</div>
-          </div>
+      <div id="links-snake">
+        <div class="link-snake" v-on:click="this.pause ">Play/Pause</div>
+        <div
+          class="link-snake"
+          v-on:click="this.restart"
+          id="restartGame"
+        >{{gameOver ? "Play again" : "Restart"}}</div>
+      </div>
 
-          <canvas id="snake" width="608" height="608" style="border:1px solid #d3d3d3;"></canvas>
-          <p id="p1">Khalid score is :</p>
-    </div>   
+      <canvas id="snake" width="608" height="608" style="border:1px solid #d3d3d3;"></canvas>
+      <p id="p1">Khalid score is :</p>
+    </div>
     <table id="leaderboard">
       <tr>
         <th id="leaderboard-title" colspan="2">Leaderboard</th>
@@ -20,6 +20,10 @@
       <tr>
         <th>Username</th>
         <th>Score</th>
+      </tr>
+      <tr v-for="item in tableContent" :key= "item.id">
+        <td>{{item.username}}</td>
+        <td>{{item.score}}</td>
       </tr>
     </table>
   </div>
@@ -33,7 +37,7 @@ import db from "@/main";
 export default {
   data: function() {
     return {
-      loggedIn: false,
+      loggedIn: null,
       square: 16,
       snake: [],
       game: null,
@@ -51,7 +55,9 @@ export default {
       ctx: null,
       user: "",
       username: "",
-      email: ""
+      email: "",
+      message: "",
+      tableContent: []
     };
   },
 
@@ -82,7 +88,7 @@ export default {
     },
 
     goToSnakeGameBoard() {
-      if (!this.loggedIn) {
+      if (this.loggedIn == null) {
         this.auth();
       } else {
         this.$router.push({ name: "snakeGameBoard" });
@@ -150,6 +156,14 @@ export default {
       this.cvs = null;
       this.ctx = null;
       document.getElementById("restartGame").innerHTML = "Restart";
+      document.getElementById("leaderboard").innerHTML =
+        "<tr>" +
+        '<th id="leaderboard-title" colspan="2">Leaderboard</th>' +
+        "</tr>" +
+        "<tr>" +
+        "<th>Username</th>" +
+        "<th>Score</th>" +
+        "</tr>";
     },
 
     playGame() {
@@ -245,13 +259,18 @@ export default {
         }
         this.snake.unshift(newHead);
 
-        document.getElementById("p1").innerHTML =
-          this.username + "'s score is: " + this.score;
+        if (this.message == "" && this.username != "") {
+          this.message = this.username + "'s score is: ";
+        }
+        document.getElementById("p1").innerHTML = this.message + this.score;
       }
     },
 
     runGame() {
-      this.game = setInterval(this.playGame, 100);
+      clearInterval(this.game);
+      if (this.game == null) {
+        this.game = setInterval(this.playGame, this.speed * this.counter);
+      }
     },
 
     updateUserScore() {
@@ -297,13 +316,10 @@ export default {
 
       query.get().then(dbUsers => {
         dbUsers.forEach(doc => {
+          
           var data = doc.data();
-          document.getElementById("leaderboard").innerHTML +=
-            "<tr><td>" +
-            data.username +
-            "</td><td>" +
-            data.score +
-            "</td></tr>";
+          this.tableContent.push( data)
+          
         });
       });
     }
@@ -319,8 +335,8 @@ export default {
 <style lang="scss" scoped>
 .snake-game {
   padding: 25px;
-  background: #7fcd91; 
-  border: 1px solid ; 
+  background: #7fcd91;
+  border: 1px solid;
   margin: 15px;
   border-radius: 5px;
 }
@@ -332,7 +348,6 @@ export default {
 #leaderboard {
   margin: 0 auto;
   text-align: center;
-  
 }
 
 #links-snake {
@@ -365,53 +380,53 @@ export default {
   cursor: pointer;
 }
 
-#game{
-  background: #DFDFDF; 
-  border: 1px solid ; 
-  padding:3px 25px 10px 25px;
+#game {
+  background: #dfdfdf;
+  border: 1px solid;
+  padding: 3px 25px 10px 25px;
   margin: 15px;
   border-radius: 5px;
 }
-table {  
-    color: #333;
-    width: 540px; 
-    border-collapse: collapse; 
-	border-spacing: 0; 
-	margin-left:auto; 
-    margin-right:auto;
+table {
+  color: #333;
+  width: 540px;
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-td, th {  
-    border: 1px solid ; /* No more visible border */
-    height: 30px; 
-    transition: all 0.3s;  /* Simple transition for hover effect */
+td,
+th {
+  border: 1px solid; /* No more visible border */
+  height: 30px;
+  transition: all 0.3s; /* Simple transition for hover effect */
 }
 
-th {  
-    background: #DFDFDF;  /* Darken header a bit */
-    font-weight: bold;
+th {
+  background: #dfdfdf; /* Darken header a bit */
+  font-weight: bold;
 }
 
-td {  
-    background: #FAFAFA;
-    text-align: center; 
-    border: 1px solid ; 
-    height: 30px; 
-    transition: all 0.3s;  
+td {
+  background: #fafafa;
+  text-align: center;
+  border: 1px solid;
+  height: 30px;
+  transition: all 0.3s;
 }
 
-td:hover { 
-  background: #666; 
-  color: #FFF; 
+td:hover {
+  background: #666;
+  color: #fff;
   cursor: pointer;
-}  
+}
 /* Hover cell effect! */
 
 #leaderboard-title {
-  border: 1px solid ;
-  height: 40px; 
+  border: 1px solid;
+  height: 40px;
   transition: all 0.3s;
   background: #cf5aa0;
 }
-
 </style>
