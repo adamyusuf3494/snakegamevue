@@ -1,13 +1,11 @@
 <template>
   <div id="app">
-    <div id="nav" v-show="$route.name !== 'home'">
-      <div class="link" @click="goToHome()">Home</div>
-      <div class="link" @click="goToResume()">Resume</div>
+    <div id="nav" >
       <div class="link" @click="goToProjects()">Projects</div>
-      <div class="link" @click="goToAbout()">About</div>
       <div class="link" @click="goToProfileSettings()" v-show="this.loggedIn == true">profileSettings</div>
       <div class="link" v-show="$route.name == 'projects' || this.loggedIn" @click="goTologInOrOut()" >{{this.loggedIn ? "Log Out" : "Log In"}}</div>
       
+
     </div>
     <router-view />
   </div>
@@ -33,20 +31,9 @@ export default {
   components: {},
 
   methods: {
-    goToHome(){
-        this.$router.push({ name: 'home'});
-      },
-
-    goToResume(){
-        this.$router.push({ name: 'resume'});
-      },
 
     goToProjects(){
       this.$router.push({ name: "projects"  });
-    },
-
-    goToAbout(){
-      this.$router.push({ name: "about"  });
     },
 
     goToProfileSettings(){
