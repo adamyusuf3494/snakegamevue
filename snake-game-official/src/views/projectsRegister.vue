@@ -58,6 +58,12 @@ export default {
         .set({
           username: this.username
         })
+        .then(function() {
+          console.log("Document written with ID: ");
+        })
+        .catch(function(error) {
+          console.error("Error adding document: ", error);
+        });
     },
 
     usernameExists() {
