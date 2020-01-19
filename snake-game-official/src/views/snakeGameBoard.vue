@@ -1,6 +1,7 @@
 <template>
   <div class="snake-game">
     <div id="game">
+      <h1>Note: game gets faster when restart/pla again is pressed</h1>
       <div id="links-snake">
         <div class="link-snake" v-on:click="this.pause ">Play/Pause</div>
         <div
@@ -269,7 +270,7 @@ export default {
     runGame() {
       clearInterval(this.game);
       if (this.game == null) {
-        this.game = setInterval(this.playGame, this.speed * this.counter);
+        this.game = setInterval(this.playGame, 100);
       }
     },
 
