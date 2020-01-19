@@ -1,13 +1,13 @@
 {
   "name": "snake-game-official",
-  "homepage": "https://github.com/adamyusuf3494/snakegamevue",
+  "homepage": "https://github.com/adamyusuf3494/snakegamevue/snake-game-official",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "deploy": "gh-pages -d snake-game-official/dist"
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "axios": "^0.19.1",
