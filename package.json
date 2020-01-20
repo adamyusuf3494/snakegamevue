@@ -1,6 +1,6 @@
 {
-  "name": "snakegame",
-  "homepage": "https://adamyusuf3494.github.io/snakegamevue",
+  "name": "snake-game-official",
+  "homepage": "https://adamyusuf3494.github.io/snakegamevue/dist",
   "version": "0.1.0",
   "private": true,
   "scripts": {

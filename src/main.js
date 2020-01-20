@@ -31,15 +31,13 @@ export default db;
 Vue.config.productionTip = false
 
 let app;
+let loggedIn=false;
 
-firebase.auth().onAuthStateChanged(user=>{
-  if(user){
-  if(!app){
+loggedIn = firebase.auth().currentUser;
+  if(!app && loggedIn){
     app = new Vue({
       router,
       store,
       render: h => h(App)
     }).$mount('#app')
     }
-  }
-});
